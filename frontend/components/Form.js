@@ -9,7 +9,7 @@ const emptyForm = {
 }
 
 export function Form(props) {
- const { inputChange, postQuiz, quizState } = props;
+ const { inputChange, postQuiz, postState } = props;
  const [ newQuiz, setNewQuiz ] = useState(emptyForm)
 
  const onChange = evt => {
@@ -23,8 +23,8 @@ export function Form(props) {
  }
 
  useEffect(() => {
-  quizState === 'success' ? setNewQuiz(emptyForm) : null
- },[quizState])
+  postState === 'success' ? setNewQuiz(emptyForm) : null
+ },[postState])
 
   return (
     <form id="form" onSubmit={onSubmit}>
@@ -39,7 +39,7 @@ export function Form(props) {
 
 const mapState = state => ({
  ...state,
- quizState: state.quizState
+ postState: state.quizState
 })
 
 export default connect(mapState, { inputChange, postQuiz })(Form);

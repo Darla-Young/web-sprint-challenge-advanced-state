@@ -1,8 +1,20 @@
-import { INPUT_CHANGE } from './action-types';
+import { 
+ // WHEEL
+ MOVE_CLOCKWISE, 
+ MOVE_COUNTERCLOCKWISE, 
+ // QUIZ
+ SET_QUIZ_INTO_STATE, 
+ SET_SELECTED_ANSWER,
+ SET_INFO_MESSAGE,
+ // FORM
+ INPUT_CHANGE,
+ RESET_FORM
+} from './action-types';
 
 const initialState = {
  wheelState: 0,
- quizState: '',
+ quizState: false,
+ postState: '',
  selectedAnswerState: null,
  messageState: '',
  formState: {
@@ -14,6 +26,26 @@ const initialState = {
 
 const reducer = (state=initialState,action) => {
  switch(action.type) {
+  // WHEEL
+
+
+  // QUIZ
+  case 'FETCHQUIZ_START':
+   return ({
+    ...state,
+    quizState: false
+   });
+  case SET_QUIZ_INTO_STATE:
+   return ({
+    ...state,
+    quizState: action.payload
+   });
+  case SET_SELECTED_ANSWER:
+   return state;
+  case SET_INFO_MESSAGE:
+   return state;
+
+  // FORM
   case INPUT_CHANGE:
    return ({
     ...state,
@@ -23,13 +55,13 @@ const reducer = (state=initialState,action) => {
   case 'POSTQUIZ_START':
    return ({
     ...state,
-    quizState: 'fetching',
+    postState: 'fetching',
     messageState: 'Submitting question...'
    })
   case 'POSTQUIZ_SUCCESS':
    return ({
     ...state,
-    quizState: 'success',
+    postState: 'success',
     messageState: 'Question successfully added to quiz',
     formState: {
      question_text: '',
@@ -40,7 +72,7 @@ const reducer = (state=initialState,action) => {
   case 'POSTQUIZ_FAIL':
    return ({
     ...state,
-    quizState: 'fail',
+    postState: 'fail',
     messageState: action.payload,
     formState: {
      question_text: '',

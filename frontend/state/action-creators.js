@@ -17,6 +17,12 @@ export function moveCounterClockwise() {
  return ({type:MOVE_COUNTERCLOCKWISE})
 }
 
+/* const initialState = {
+ wheelState: 0,
+ selectedAnswerState: null,
+ messageState: ''
+} */
+
 // QUIZ PAGE
 export function selectAnswer() {
  return ({type:SET_SELECTED_ANSWER})
@@ -24,17 +30,15 @@ export function selectAnswer() {
 export function setMessage() {
  return ({type:SET_INFO_MESSAGE})
 }
-export function setQuiz() {
- return ({type:SET_QUIZ_INTO_STATE})
-}
-export function fetchQuiz(action) {
+export function fetchQuiz() {
   return function (dispatch) {
-   dispatch({type:FETCHQUIZ_START});
+   dispatch({type:'FETCHQUIZ_START'});
    axios
-    .get()
-    // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
-    // On successful GET:
-    // - Dispatch an action to send the obtained quiz to its state
+    .get('http://localhost:9000/api/quiz/next')
+    .then(res => {
+     dispatch({type:SET_QUIZ_INTO_STATE, payload:res.data});
+    })
+    .catch(err => console.log(err))
   }
 }
 export function postAnswer() {

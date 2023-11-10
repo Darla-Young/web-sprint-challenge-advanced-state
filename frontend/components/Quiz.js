@@ -1,31 +1,51 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { fetchQuiz } from '../state/action-creators';
 
-export default function Quiz(props) {
+const Quiz = (props) => {
+ const { quizState, fetchQuiz } = props;
+ const [ selected, setSelected ] = useState({zero: null,one: null})
+
+ const onClick = e => {
+  setSelected({
+   [e.target.id]:selected,
+   [!e.target.id]:null
+  })
+ }
+
+ const onSubmit = e => {
+  e.preventDefault();
+
+ }
+
+ useEffect(() => {
+  fetchQuiz();
+ },[])
+
   return (
     <div id="wrapper">
       {
-        // quiz already in state? Let's use that, otherwise render "Loading next quiz..."
-        true ? (
+        quizState ? (
           <>
-            <h2>What is a closure?</h2>
+            <h2>{quizState.question}</h2>
 
             <div id="quizAnswers">
-              <div className="answer selected">
-                A function
-                <button>
+              <div id='zero' className={selected.zero}>
+                {quizState.answers[0].text}
+                <button onClick={onClick}>
                   SELECTED
                 </button>
               </div>
 
-              <div className="answer">
-                An elephant
-                <button>
+              <div id='one' className="answer">
+              {quizState.answers[1].text}
+                <button onClick={onClick}>
                   Select
                 </button>
               </div>
             </div>
 
-            <button id="submitAnswerBtn">Submit answer</button>
+            <button id="submitAnswerBtn" onClick={onSubmit}>Submit answer</button>
           </>
         ) : 'Loading next quiz...'
       }
@@ -33,11 +53,9 @@ export default function Quiz(props) {
   )
 }
 
+const mapState = state => ({
+ ...state,
+ quizState: state.quizState
+})
 
-const mapState = state => {
- wheel = state.wheel, 
- quiz = state.quiz, 
- selectedAnswer = state.selectedAnswer, 
- infoMessage = state.infoMessage, 
- form = state.form
-}
+export default connect(mapState,{ fetchQuiz })(Quiz);
