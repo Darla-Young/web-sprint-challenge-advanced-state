@@ -1,21 +1,37 @@
-// ❗ You don't need to add extra action creators to achieve MVP
-export function moveClockwise() { }
+import axios from "axios";
+import {
+ MOVE_CLOCKWISE,
+ MOVE_COUNTERCLOCKWISE,
+ SET_QUIZ_INTO_STATE,
+ SET_SELECTED_ANSWER,
+ SET_INFO_MESSAGE,
+ INPUT_CHANGE,
+ RESET_FORM
+} from './action-types'
 
-export function moveCounterClockwise() { }
+// WHEEL PAGE
+export function moveClockwise() {
+ return ({type:MOVE_CLOCKWISE})
+}
+export function moveCounterClockwise() {
+ return ({type:MOVE_COUNTERCLOCKWISE})
+}
 
-export function selectAnswer() { }
-
-export function setMessage() { }
-
-export function setQuiz() { }
-
-export function inputChange() { }
-
-export function resetForm() { }
-
-// ❗ Async action creators
-export function fetchQuiz() {
+// QUIZ PAGE
+export function selectAnswer() {
+ return ({type:SET_SELECTED_ANSWER})
+}
+export function setMessage() {
+ return ({type:SET_INFO_MESSAGE})
+}
+export function setQuiz() {
+ return ({type:SET_QUIZ_INTO_STATE})
+}
+export function fetchQuiz(action) {
   return function (dispatch) {
+   dispatch({type:FETCHQUIZ_START});
+   axios
+    .get()
     // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
     // On successful GET:
     // - Dispatch an action to send the obtained quiz to its state
@@ -29,11 +45,22 @@ export function postAnswer() {
     // - Dispatch the fetching of the next quiz
   }
 }
-export function postQuiz() {
+
+// FORM PAGE
+export function inputChange(form) {
+ return ({type:INPUT_CHANGE, payload:form})
+}
+
+export function postQuiz(form) {
   return function (dispatch) {
-    // On successful POST:
-    // - Dispatch the correct message to the the appropriate state
-    // - Dispatch the resetting of the form
+   dispatch({type:'POSTQUIZ_START'});
+   axios
+    .post('http://localhost:9000/api/quiz/new',form)
+    .then(res => {
+     dispatch({type:'POSTQUIZ_SUCCESS', payload:res.data});
+    })
+    .catch(err => {
+     dispatch({type:'POSTQUIZ_FAIL',payload:err.message});
+    })
   }
 }
-// ❗ On promise rejections, use log statements or breakpoints, and put an appropriate error message in state

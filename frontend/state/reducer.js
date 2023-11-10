@@ -1,50 +1,61 @@
-import { combineReducers } from 'redux'
+import { INPUT_CHANGE } from './action-types';
 
-const initialWheelState = 0
-const initialQuizState = null
-const initialSelectedAnswerState = null
-const initialMessageState = ''
-const initialFormState = {
-  newQuestion: '',
-  newTrueAnswer: '',
-  newFalseAnswer: '',
+const initialState = {
+ wheelState: 0,
+ quizState: '',
+ selectedAnswerState: null,
+ messageState: '',
+ formState: {
+  question_text: '',
+  true_answer_text: '',
+  false_answer_text: '',
+ }
 }
 
-function wheel(state = initialWheelState, action) {
-  return state
-}
-
-/* - `[GET] http://localhost:9000/api/quiz/next`
-  - The response to a proper request includes `200 OK` and the next quiz object */
-function quiz(state = initialQuizState, action) {
-  return state
-}
-
-function selectedAnswer(state = initialSelectedAnswerState, action) {
-  return state
+const reducer = (state=initialState,action) => {
+ switch(action.type) {
+  case INPUT_CHANGE:
+   return ({
+    ...state,
+    formState: action.payload,
+    messageState: ''
+   });
+  case 'POSTQUIZ_START':
+   return ({
+    ...state,
+    quizState: 'fetching',
+    messageState: 'Submitting question...'
+   })
+  case 'POSTQUIZ_SUCCESS':
+   return ({
+    ...state,
+    quizState: 'success',
+    messageState: 'Question successfully added to quiz',
+    formState: {
+     question_text: '',
+     true_answer_text: '',
+     false_answer_text: '',
+    }
+   })
+  case 'POSTQUIZ_FAIL':
+   return ({
+    ...state,
+    quizState: 'fail',
+    messageState: action.payload,
+    formState: {
+     question_text: '',
+     true_answer_text: '',
+     false_answer_text: '',
+    }
+   })
+  default:
+   return state;
+ }
 }
 
 /* - `[POST] http://localhost:9000/api/quiz/answer`
   - Expects a payload with the following properties: `quiz_id`, `answer_id`
   - Example of payload: `{ "quiz_id": "LVqUh", "answer_id": "0VEv0" }`
   - A response to a proper request includes `200 OK` and feedback on the answer */
-function infoMessage(state = initialMessageState, action) {
-  return state
-}
 
-/* - `[POST] http://localhost:9000/api/quiz/new`
-  - Expects a payload with the following properties: `question_text`, `true_answer_text`, `false_answer_text`
-  - Example of payload: `{ "question_text": "Love JS?", "true_answer_text": "yes", "false_answer_text": "nah" }`
-  - The response to a proper request includes `201 Created` and the newly created quiz object
-  - A malformed client payload will result in a `422 Unprocessable Entity` response with a reason */
-function form(state = initialFormState, action) {
-  return state
-}
-
-export default combineReducers({ 
- wheel, 
- quiz, 
- selectedAnswer, 
- infoMessage, 
- form 
-})
+export default reducer;

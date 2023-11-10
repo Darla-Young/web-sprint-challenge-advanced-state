@@ -1,34 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import * as actionCreators from '../state/action-creators';
+import { inputChange, postQuiz } from '../state/action-creators';
+
+const emptyForm = {
+  question_text: '',
+  true_answer_text: '',
+  false_answer_text: ''
+}
 
 export function Form(props) {
- const { form } = props;
- const [ entry, setEntry ] = useState({
-  newQuestion: '',
-  newTrueAnswer: '',
-  newFalseAnswer: ''
- });
+ const { inputChange, postQuiz, quizState } = props;
+ const [ newQuiz, setNewQuiz ] = useState(emptyForm)
 
-  const onChange = evt => {
-   setEntry({
-    ...entry,
-    [evt.target.id]: evt.target.value
-   });
-   return entry;
-  }
+ const onChange = evt => {
+  setNewQuiz({...newQuiz, [evt.target.id]:evt.target.value})
+  return inputChange(newQuiz);
+ }
 
-  const onSubmit = evt => {
-   evt.preventDefault();
-   console.log(entry);
-  }
+ const onSubmit = evt => {
+  evt.preventDefault();
+  postQuiz(newQuiz);
+ }
+
+ useEffect(() => {
+  quizState === 'success' ? setNewQuiz(emptyForm) : null
+ },[quizState])
 
   return (
     <form id="form" onSubmit={onSubmit}>
       <h2>Create New Quiz</h2>
-      <input maxLength={50} onChange={onChange} id="newQuestion" placeholder="Enter question" />
-      <input maxLength={50} onChange={onChange} id="newTrueAnswer" placeholder="Enter true answer" />
-      <input maxLength={50} onChange={onChange} id="newFalseAnswer" placeholder="Enter false answer" />
+      <input maxLength={50} value={newQuiz.question_text} onChange={onChange} id="question_text" placeholder="Enter question" />
+      <input maxLength={50} value={newQuiz.true_answer_text} onChange={onChange} id="true_answer_text" placeholder="Enter true answer" />
+      <input maxLength={50} value={newQuiz.false_answer_text} onChange={onChange} id="false_answer_text" placeholder="Enter false answer" />
       <button id="submitNewQuizBtn">Submit new quiz</button>
     </form>
   )
@@ -36,7 +39,7 @@ export function Form(props) {
 
 const mapState = state => ({
  ...state,
- form: state.form
-});
+ quizState: state.quizState
+})
 
-export default connect(mapState, actionCreators)(Form);
+export default connect(mapState, { inputChange, postQuiz })(Form);
