@@ -18,3 +18,11 @@ export default function Wheel(props) {
     </div>
   )
 }
+
+const mapState = state => {
+ wheel = state.wheel, 
+ quiz = state.quiz, 
+ selectedAnswer = state.selectedAnswer, 
+ infoMessage = state.infoMessage, 
+ form = state.form
+}

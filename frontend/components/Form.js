@@ -1,15 +1,26 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import * as actionCreators from '../state/action-creators'
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import * as actionCreators from '../state/action-creators';
 
 export function Form(props) {
+ const { form } = props;
+ const [ entry, setEntry ] = useState({
+  newQuestion: '',
+  newTrueAnswer: '',
+  newFalseAnswer: ''
+ });
 
   const onChange = evt => {
-
+   setEntry({
+    ...entry,
+    [evt.target.id]: evt.target.value
+   });
+   return entry;
   }
 
   const onSubmit = evt => {
-
+   evt.preventDefault();
+   console.log(entry);
   }
 
   return (
@@ -23,4 +34,9 @@ export function Form(props) {
   )
 }
 
-export default connect(st => st, actionCreators)(Form)
+const mapState = state => ({
+ ...state,
+ form: state.form
+});
+
+export default connect(mapState, actionCreators)(Form);
