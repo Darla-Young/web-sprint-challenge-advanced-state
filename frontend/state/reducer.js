@@ -25,53 +25,76 @@ const initialState = {
 }
 
 const reducer = (state=initialState,action) => {
- console.log('reducer');
  switch(action.type) {
   // WHEEL
+  case MOVE_CLOCKWISE:
+   if (state.wheelState < 5) {
+    return {
+     ...state,
+     wheelState: state.wheelState + 1
+    }
+   } else {
+    return {
+     ...state,
+     wheelState: 0
+    }
+   }
 
+  case MOVE_COUNTERCLOCKWISE:
+   if (state.wheelState > 0) {
+    return {
+     ...state,
+     wheelState: state.wheelState - 1
+    }
+   } else {
+    return {
+     ...state,
+     wheelState: 5
+    }
+   }
 
   // QUIZ
   case SET_QUIZ_INTO_STATE:
    console.log(action);
-   return ({
+   return {
     ...state,
     quizState: action.payload
-   });
+   };
 
   case SET_SELECTED_ANSWER:
    console.log(action)
-   return ({
+   return {
     ...state,
     selectedAnswerState: action.payload
-   });
+   };
 
   case SET_INFO_MESSAGE:
    console.log(action);
-   return ({
+   return {
     state,
     messageState: action.payload
-   });
+   };
 
   // FORM
   case INPUT_CHANGE:
    console.log(action);
-   return ({
+   return {
     ...state,
     formState: action.payload,
     messageState: ''
-   });
+   };
 
   case 'POSTQUIZ_START':
    console.log(action);
-   return ({
+   return {
     ...state,
     postState: 'fetching',
     messageState: 'Submitting question...'
-   });
+   };
 
   case 'POSTQUIZ_SUCCESS':
    console.log(action);
-   return ({
+   return {
     ...state,
     postState: 'success',
     messageState: 'Question successfully added to quiz',
@@ -80,11 +103,11 @@ const reducer = (state=initialState,action) => {
      true_answer_text: '',
      false_answer_text: '',
     }
-   });
+   };
 
   case 'POSTQUIZ_FAIL':
    console.log(action);
-   return ({
+   return {
     ...state,
     postState: 'fail',
     messageState: action.payload,
@@ -93,7 +116,7 @@ const reducer = (state=initialState,action) => {
      true_answer_text: '',
      false_answer_text: '',
     }
-   });
+   };
 
   default:
    return state;

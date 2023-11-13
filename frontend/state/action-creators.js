@@ -11,25 +11,23 @@ import {
 
 // WHEEL PAGE
 export function moveClockwise() {
- return ({type:MOVE_CLOCKWISE})
+ return ({type:MOVE_CLOCKWISE});
 }
+
 export function moveCounterClockwise() {
- return ({type:MOVE_COUNTERCLOCKWISE})
+ return ({type:MOVE_COUNTERCLOCKWISE});
 }
 
 // QUIZ PAGE
 export function selectAnswer(answer) {
- console.log(answer);
  return ({type:SET_SELECTED_ANSWER, payload:answer});
 }
 
 export function setMessage(message) {
- console.log(message);
  return ({type:SET_INFO_MESSAGE,payload:message});
 }
 
 export function fetchQuiz() {
- console.log('fetchQuiz');
   return function (dispatch) {
    axios
     .get('http://localhost:9000/api/quiz/next')
@@ -41,7 +39,6 @@ export function fetchQuiz() {
 }
 
 export function postAnswer(answer) {
- console.log(answer);
   return function (dispatch) {
    axios
     .post('http://localhost:9000/api/quiz/answer',answer)
@@ -56,12 +53,10 @@ export function postAnswer(answer) {
 
 // FORM PAGE
 export function inputChange(form) {
- console.log(form);
  return ({type:INPUT_CHANGE, payload:form});
 }
 
 export function postQuiz(form) {
- console.log(form);
   return function (dispatch) {
    dispatch({type:'POSTQUIZ_START'});
    axios
