@@ -8,7 +8,7 @@ import {
  SET_INFO_MESSAGE,
  // FORM
  INPUT_CHANGE,
- RESET_FORM
+ // RESET_FORM
 } from './action-types';
 
 const initialState = {
@@ -25,40 +25,52 @@ const initialState = {
 }
 
 const reducer = (state=initialState,action) => {
+ console.log('reducer');
  switch(action.type) {
   // WHEEL
 
 
   // QUIZ
-  case 'FETCHQUIZ_START':
-   return ({
-    ...state,
-    quizState: false
-   });
   case SET_QUIZ_INTO_STATE:
+   console.log(action);
    return ({
     ...state,
     quizState: action.payload
    });
+
   case SET_SELECTED_ANSWER:
-   return state;
+   console.log(action)
+   return ({
+    ...state,
+    selectedAnswerState: action.payload
+   });
+
   case SET_INFO_MESSAGE:
-   return state;
+   console.log(action);
+   return ({
+    state,
+    messageState: action.payload
+   });
 
   // FORM
   case INPUT_CHANGE:
+   console.log(action);
    return ({
     ...state,
     formState: action.payload,
     messageState: ''
    });
+
   case 'POSTQUIZ_START':
+   console.log(action);
    return ({
     ...state,
     postState: 'fetching',
     messageState: 'Submitting question...'
-   })
+   });
+
   case 'POSTQUIZ_SUCCESS':
+   console.log(action);
    return ({
     ...state,
     postState: 'success',
@@ -68,8 +80,10 @@ const reducer = (state=initialState,action) => {
      true_answer_text: '',
      false_answer_text: '',
     }
-   })
+   });
+
   case 'POSTQUIZ_FAIL':
+   console.log(action);
    return ({
     ...state,
     postState: 'fail',
@@ -79,15 +93,11 @@ const reducer = (state=initialState,action) => {
      true_answer_text: '',
      false_answer_text: '',
     }
-   })
+   });
+
   default:
    return state;
  }
 }
-
-/* - `[POST] http://localhost:9000/api/quiz/answer`
-  - Expects a payload with the following properties: `quiz_id`, `answer_id`
-  - Example of payload: `{ "quiz_id": "LVqUh", "answer_id": "0VEv0" }`
-  - A response to a proper request includes `200 OK` and feedback on the answer */
 
 export default reducer;

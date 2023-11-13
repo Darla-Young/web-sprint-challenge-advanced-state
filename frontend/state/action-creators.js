@@ -6,7 +6,7 @@ import {
  SET_SELECTED_ANSWER,
  SET_INFO_MESSAGE,
  INPUT_CHANGE,
- RESET_FORM
+ // RESET_FORM
 } from './action-types'
 
 // WHEEL PAGE
@@ -17,45 +17,51 @@ export function moveCounterClockwise() {
  return ({type:MOVE_COUNTERCLOCKWISE})
 }
 
-/* const initialState = {
- wheelState: 0,
- selectedAnswerState: null,
- messageState: ''
-} */
-
 // QUIZ PAGE
-export function selectAnswer() {
- return ({type:SET_SELECTED_ANSWER})
+export function selectAnswer(answer) {
+ console.log(answer);
+ return ({type:SET_SELECTED_ANSWER, payload:answer});
 }
-export function setMessage() {
- return ({type:SET_INFO_MESSAGE})
+
+export function setMessage(message) {
+ console.log(message);
+ return ({type:SET_INFO_MESSAGE,payload:message});
 }
+
 export function fetchQuiz() {
+ console.log('fetchQuiz');
   return function (dispatch) {
-   dispatch({type:'FETCHQUIZ_START'});
    axios
     .get('http://localhost:9000/api/quiz/next')
     .then(res => {
      dispatch({type:SET_QUIZ_INTO_STATE, payload:res.data});
     })
-    .catch(err => console.log(err))
+    .catch(err => console.log(err));
   }
 }
-export function postAnswer() {
+
+export function postAnswer(answer) {
+ console.log(answer);
   return function (dispatch) {
-    // On successful POST:
-    // - Dispatch an action to reset the selected answer state
-    // - Dispatch an action to set the server message to state
-    // - Dispatch the fetching of the next quiz
+   axios
+    .post('http://localhost:9000/api/quiz/answer',answer)
+    .then(res => {
+     dispatch(selectAnswer(''));
+     dispatch(setMessage(res.data.message));
+     dispatch(fetchQuiz);
+    })
+    .catch(err => console.log(err));
   }
 }
 
 // FORM PAGE
 export function inputChange(form) {
- return ({type:INPUT_CHANGE, payload:form})
+ console.log(form);
+ return ({type:INPUT_CHANGE, payload:form});
 }
 
 export function postQuiz(form) {
+ console.log(form);
   return function (dispatch) {
    dispatch({type:'POSTQUIZ_START'});
    axios
