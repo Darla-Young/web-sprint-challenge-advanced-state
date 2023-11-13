@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchQuiz, postAnswer, selectAnswer } from '../state/action-creators';
 
@@ -10,6 +10,12 @@ const Quiz = (props) => {
   postAnswer,
   selectAnswer
  } = props;
+
+ const [ disabled, setDisabled] = useState(true);
+
+ useEffect(() => {
+  selectedAnswerState ? setDisabled(false) : setDisabled(true);
+ },[selectedAnswerState]);
 
  const onClick = e => {
   selectAnswer(e.target.id);
@@ -25,7 +31,7 @@ const Quiz = (props) => {
  }
 
  useEffect(() => {
-  fetchQuiz();
+  quizState ? null : fetchQuiz();
  },[])
 
   return (
@@ -51,7 +57,7 @@ const Quiz = (props) => {
               </div>
             </div>
 
-            <button id="submitAnswerBtn" onClick={onSubmit}>Submit answer</button>
+            <button id="submitAnswerBtn" disabled={disabled} onClick={onSubmit}>Submit answer</button>
           </>
         ) : 'Loading next quiz...'
       }

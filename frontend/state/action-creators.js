@@ -6,7 +6,7 @@ import {
  SET_SELECTED_ANSWER,
  SET_INFO_MESSAGE,
  INPUT_CHANGE,
- // RESET_FORM
+ RESET_FORM
 } from './action-types'
 
 // WHEEL PAGE
@@ -47,25 +47,29 @@ export function postAnswer(answer) {
      dispatch(setMessage(res.data.message));
      dispatch(fetchQuiz);
     })
-    .catch(err => console.log(err));
+    .catch(err => {console.log(err)});
   }
 }
 
 // FORM PAGE
-export function inputChange(form) {
- return ({type:INPUT_CHANGE, payload:form});
+export function inputChange(formElement) {
+ return ({type:INPUT_CHANGE, payload:formElement});
 }
 
-export function postQuiz(form) {
+export function resetForm() {
+ return ({type:RESET_FORM});
+}
+
+export function postForm(form) {
   return function (dispatch) {
-   dispatch({type:'POSTQUIZ_START'});
    axios
     .post('http://localhost:9000/api/quiz/new',form)
     .then(res => {
-     dispatch({type:'POSTQUIZ_SUCCESS', payload:res.data});
+     dispatch(setMessage(`Congrats: "${res.data.question}" is a great question!`));
+     dispatch(resetForm());
     })
     .catch(err => {
-     dispatch({type:'POSTQUIZ_FAIL',payload:err.message});
+     dispatch(setMessage(err.message));
     })
   }
 }

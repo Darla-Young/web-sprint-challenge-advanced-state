@@ -8,19 +8,18 @@ import {
  SET_INFO_MESSAGE,
  // FORM
  INPUT_CHANGE,
- // RESET_FORM
+ RESET_FORM
 } from './action-types';
 
 const initialState = {
  wheelState: 0,
  quizState: false,
- postState: '',
  selectedAnswerState: null,
  messageState: '',
  formState: {
   question_text: '',
   true_answer_text: '',
-  false_answer_text: '',
+  false_answer_text: ''
  }
 }
 
@@ -76,40 +75,22 @@ const reducer = (state=initialState,action) => {
   case INPUT_CHANGE:
    return {
     ...state,
-    formState: action.payload,
+    formState: {
+     ...state.formState,
+     [action.payload.id]: action.payload.value
+    },
     messageState: ''
    };
 
-  case 'POSTQUIZ_START':
-   return {
-    ...state,
-    postState: 'fetching',
-    messageState: 'Submitting question...'
-   };
-
-  case 'POSTQUIZ_SUCCESS':
-   return {
-    ...state,
-    postState: 'success',
-    messageState: 'Question successfully added to quiz',
-    formState: {
-     question_text: '',
-     true_answer_text: '',
-     false_answer_text: '',
+   case RESET_FORM:
+    return {
+     ...state,
+     formState: {
+      question_text: '',
+      true_answer_text: '',
+      false_answer_text: ''
+     }
     }
-   };
-
-  case 'POSTQUIZ_FAIL':
-   return {
-    ...state,
-    postState: 'fail',
-    messageState: action.payload,
-    formState: {
-     question_text: '',
-     true_answer_text: '',
-     false_answer_text: '',
-    }
-   };
 
   default:
    return state;
