@@ -24,7 +24,7 @@ export function selectAnswer(answer) {
 }
 
 export function setMessage(message) {
- return ({type:SET_INFO_MESSAGE,payload:message});
+ return ({type:SET_INFO_MESSAGE, payload:message});
 }
 
 export function fetchQuiz() {
@@ -41,7 +41,7 @@ export function fetchQuiz() {
 export function postAnswer(answer) {
   return function (dispatch) {
    axios
-    .post('http://localhost:9000/api/quiz/answer',answer)
+    .post('http://localhost:9000/api/quiz/answer', answer)
     .then(res => {
      dispatch(selectAnswer(''));
      dispatch(setMessage(res.data.message));

@@ -7,7 +7,8 @@ const Quiz = (props) => {
   quizState, 
   selectedAnswerState, 
   fetchQuiz, 
-  postAnswer 
+  postAnswer,
+  selectAnswer
  } = props;
 
  const onClick = e => {
@@ -19,7 +20,8 @@ const Quiz = (props) => {
   postAnswer({
    "quiz_id": quizState.quiz_id, 
    "answer_id": selectedAnswerState
-  })
+  });
+  fetchQuiz();
  }
 
  useEffect(() => {
@@ -43,8 +45,8 @@ const Quiz = (props) => {
 
               <div className={`${quizState.answers[1].answer_id === selectedAnswerState ? "answer selected" : "answer"}`}>
               {quizState.answers[1].text}
-                <button id={quizState.answers[0].answer_id} onClick={onClick}>
-                  {quizState.answers[0].answer_id === selectedAnswerState ? "SELECTED" : "select"}
+                <button id={quizState.answers[1].answer_id} onClick={onClick}>
+                  {quizState.answers[1].answer_id === selectedAnswerState ? "SELECTED" : "select"}
                 </button>
               </div>
             </div>

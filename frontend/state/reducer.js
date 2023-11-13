@@ -55,21 +55,18 @@ const reducer = (state=initialState,action) => {
 
   // QUIZ
   case SET_QUIZ_INTO_STATE:
-   console.log(action);
    return {
     ...state,
     quizState: action.payload
    };
 
   case SET_SELECTED_ANSWER:
-   console.log(action)
    return {
     ...state,
     selectedAnswerState: action.payload
    };
 
   case SET_INFO_MESSAGE:
-   console.log(action);
    return {
     state,
     messageState: action.payload
@@ -77,7 +74,6 @@ const reducer = (state=initialState,action) => {
 
   // FORM
   case INPUT_CHANGE:
-   console.log(action);
    return {
     ...state,
     formState: action.payload,
@@ -85,7 +81,6 @@ const reducer = (state=initialState,action) => {
    };
 
   case 'POSTQUIZ_START':
-   console.log(action);
    return {
     ...state,
     postState: 'fetching',
@@ -93,7 +88,6 @@ const reducer = (state=initialState,action) => {
    };
 
   case 'POSTQUIZ_SUCCESS':
-   console.log(action);
    return {
     ...state,
     postState: 'success',
@@ -106,7 +100,6 @@ const reducer = (state=initialState,action) => {
    };
 
   case 'POSTQUIZ_FAIL':
-   console.log(action);
    return {
     ...state,
     postState: 'fail',
