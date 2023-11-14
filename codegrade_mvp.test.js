@@ -238,7 +238,7 @@ describe('Advanced State Sprint Challenge Submission', () => {
       fireEvent.click(answerA.querySelector('button'))
       fireEvent.click(submitAnswerBtn())
       await screen.findByText(WhatIsPromise, queryOptions, waitForOptions)
-      screen.getByText(ThatIsCorrect, queryOptions)
+      screen.findByText(ThatIsCorrect, queryOptions)
       answerA = screen.queryByText(AValue, queryOptions)
       fireEvent.click(answerA.querySelector('button'))
       fireEvent.click(submitAnswerBtn())
