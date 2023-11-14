@@ -1,57 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { inputChange, postForm } from '../state/action-creators';
 
 export function Form(props) {
- const { inputChange, postForm } = props;
- const stateForm = useSelector(state => state.formState);
- const [ form, setForm ] = useState(stateForm);
+ const { inputChange, postForm, formState } = props;
  const [ disabled, setDisabled] = useState(true);
 
- const question = form.question_text;
- const trueAnswer = form.true_answer_text;
- const falseAnswer = form.false_answer_text;
-
  useEffect(() => {
-   setForm([stateForm])
- },[stateForm]);
-
- useEffect(() => {
-  let ignore = false;
-  if(!ignore) {
-   if (question.trim() && trueAnswer.trim() && falseAnswer.trim()) {
-    setDisabled(false)
-   }
-   else {
-    return setDisabled(true)
-   }
-  }
-  return () => {ignore = true}
- },[form]);
+   if (formState.question_text.trim() && formState.true_answer_text.trim() && formState.false_answer_text.trim()) {setDisabled(false)}
+   else {setDisabled(true)}
+ },[formState])
 
  const onChange = evt => {
-  let id = '';
-  if (evt.target.id === "newQuestion") {id = "question_text"}
-  else if (evt.target.id === "newTrueAnswer") {id = "true_answer_text"}
-  else {id = "false_answer_text"}
-  inputChange({id: id, value: evt.target.value});
+  if (evt.target.id === "newQuestion") {
+   inputChange({id: "question_text", value: evt.target.value})
+  }
+  else if (evt.target.id === "newTrueAnswer") {
+   inputChange({id: "true_answer_text", value: evt.target.value})
+  }
+  else {
+   inputChange({id: "false_answer_text", value: evt.target.value})
+  }
  }
 
  const onSubmit = evt => {
   evt.preventDefault();
-  postForm(form);
+  postForm(formState);
   setDisabled(true);
  }
 
   return (
-    <form id="form" onSubmit={onSubmit}>
-      <h2>Create New Quiz</h2>
-      <input maxLength={50} value={form.question} onChange={onChange} id='newQuestion' placeholder="Enter question" />
-      <input maxLength={50} value={form.trueAnswer} onChange={onChange} id='newTrueAnswer' placeholder="Enter true answer" />
-      <input maxLength={50} value={form.falseAnswer} onChange={onChange} id='newFalseAnswer' placeholder="Enter false answer" />
-      <button id="submitNewQuizBtn" disabled={disabled} >Submit new quiz</button>
-    </form>
-  )
+  <form id="form" onSubmit={onSubmit}>
+   <h2>Create New Quiz</h2>
+   <input maxLength={50} value={formState.question_text} onChange={onChange} id='newQuestion' placeholder="Enter question" />
+   <input maxLength={50} value={formState.true_answer_text} onChange={onChange} id='newTrueAnswer' placeholder="Enter true answer" />
+   <input maxLength={50} value={formState.false_answer_text} onChange={onChange} id='newFalseAnswer' placeholder="Enter false answer" />
+   <button id="submitNewQuizBtn" disabled={disabled} >Submit new quiz</button>
+  </form>
+ )
 }
 
 const mapState = state => ({
